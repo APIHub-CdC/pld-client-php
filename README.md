@@ -81,13 +81,13 @@ openssl pkcs12 -name ${ALIAS} \
  2. Dar clic en la sección "**Mis aplicaciones**".
  3. Seleccionar la aplicación.
  4. Ir a la pestaña de "**Certificados para @tuApp**".
-  <p align="center">
-    <img src="https://github.com/APIHub-CdC/imagenes-cdc/blob/master/applications.png">
-  </p>
+    <p align="center">
+        <img src="https://github.com/APIHub-CdC/imagenes-cdc/blob/master/applications.png">
+    </p>
  5. Al abrirse la ventana emergente, dar clic al botón "**Descargar**":
-  <p align="center">
-    <img src="https://github.com/APIHub-CdC/imagenes-cdc/blob/master/download_cert.png" width="268">
-  </p>
+    <p align="center">
+        <img src="https://github.com/APIHub-CdC/imagenes-cdc/blob/master/download_cert.png" width="268">
+    </p>
 
  > Es importante que este contenedor sea almacenado en la siguiente ruta:
  > **/path/to/repository/lib/Interceptor/keypair.p12**
