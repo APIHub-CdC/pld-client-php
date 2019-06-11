@@ -13,12 +13,12 @@ Desktop.ini
 
 # ignore Composer downloads
 /vendor/*
+*.lock
 
 # keep some hiddens
 !.htaccess
 !/.gitignore
 .travis.yml
-
 
 # ignore keys
 

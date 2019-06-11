@@ -476,8 +476,8 @@ class Persona implements ModelInterface, ArrayAccess
     public function setRfc($rfc)
     {
 
-        if (!is_null($rfc) && (!preg_match("/^([A-ZÑ,&amp;]{3,4}([0-9]{2})(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1]))([A-Z\\\\d]{3})?$/", $rfc))) {
-            throw new \InvalidArgumentException("invalid value for $rfc when calling Persona., must conform to the pattern /^([A-ZÑ,&amp;]{3,4}([0-9]{2})(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1]))([A-Z\\\\d]{3})?$/.");
+        if (!is_null($rfc) && (!preg_match("/^([A-ZÑ,&amp;]{3,4}([0-9]{2})(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1]))([A-Z\d]{3})?$/", $rfc))) {
+            throw new \InvalidArgumentException("invalid value for $rfc when calling Persona., must conform to the pattern /^([A-ZÑ,&amp;]{3,4}([0-9]{2})(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1]))([A-Z\d]{3})?$/.");
         }
 
         $this->container['rfc'] = $rfc;
@@ -493,8 +493,8 @@ class Persona implements ModelInterface, ArrayAccess
     public function setCurp($curp)
     {
 
-        if (!is_null($curp) && (!preg_match("/^([A-Z][AEIOUX][A-Z]{2}\\\\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\\\\d|3[01])[HM](?:AS|B[CS]|C[CLMSH]|D[FG]|G[TR]|HG|JC|M[CNS]|N[ETL]|OC|PL|Q[TR]|S[PLR]|T[CSL]|VZ|YN|ZS)[B-DF-HJ-NP-TV-Z]{3}[A-Z\\\\d])(\\\\d)$/", $curp))) {
-            throw new \InvalidArgumentException("invalid value for $curp when calling Persona., must conform to the pattern /^([A-Z][AEIOUX][A-Z]{2}\\\\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\\\\d|3[01])[HM](?:AS|B[CS]|C[CLMSH]|D[FG]|G[TR]|HG|JC|M[CNS]|N[ETL]|OC|PL|Q[TR]|S[PLR]|T[CSL]|VZ|YN|ZS)[B-DF-HJ-NP-TV-Z]{3}[A-Z\\\\d])(\\\\d)$/.");
+        if (!is_null($curp) && (!preg_match("/^([A-Z][AEIOUX][A-Z]{2}\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])[HM](?:AS|B[CS]|C[CLMSH]|D[FG]|G[TR]|HG|JC|M[CNS]|N[ETL]|OC|PL|Q[TR]|S[PLR]|T[CSL]|VZ|YN|ZS)[B-DF-HJ-NP-TV-Z]{3}[A-Z\d])(\d)$/", $curp))) {
+            throw new \InvalidArgumentException("invalid value for $curp when calling Persona., must conform to the pattern /^([A-Z][AEIOUX][A-Z]{2}\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])[HM](?:AS|B[CS]|C[CLMSH]|D[FG]|G[TR]|HG|JC|M[CNS]|N[ETL]|OC|PL|Q[TR]|S[PLR]|T[CSL]|VZ|YN|ZS)[B-DF-HJ-NP-TV-Z]{3}[A-Z\d])(\d)$/.");
         }
 
         $this->container['curp'] = $curp;
@@ -559,7 +559,7 @@ class Persona implements ModelInterface, ArrayAccess
 
     public function setDependencia($dependencia)
     {
-        if (!is_null($dependencia) && (mb_strlen($dependencia) > 30)) {
+        if (!is_null($dependencia) && (mb_strlen($dependencia) > 120)) {
             throw new \InvalidArgumentException('invalid length for $dependencia when calling Persona., must be smaller than or equal to 30.');
         }
         if (!is_null($dependencia) && (mb_strlen($dependencia) < 0)) {
