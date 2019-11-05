@@ -1,20 +1,20 @@
 <?php 
-namespace APIHub\Client\Interceptor;
+namespace PLD\Client\Interceptor;
 
 use \GuzzleHttp\Middleware;
 use \GuzzleHttp\Psr7\Stream;
 use \Psr\Http\Message\RequestInterface as streamRequest;
 use \Psr\Http\Message\ResponseInterface as streamResponse;
 
-use \APIHub\Client\Interceptor\KeyHandler;
-use \APIHub\Client\Interceptor\MyLogger;
-use \APIHub\Client\Model\Errors;
-use \APIHub\Client\Model\Error;
+use \PLD\Client\Interceptor\KeyHandler;
+use \PLD\Client\Interceptor\MyLogger;
+use \PLD\Client\Model\Errors;
+use \PLD\Client\Model\Error;
 
 class MiddlewareEvents
 {
     
-    function __construct(\APIHub\Client\Interceptor\KeyHandler $signer)
+    function __construct(\PLD\Client\Interceptor\KeyHandler $signer)
     {
         $this->signer = $signer;
         $this->logger = new MyLogger('MiddlewareEvents');
@@ -83,11 +83,11 @@ class MiddlewareEvents
 }
 
 function build_error($code, $message){
-    $error = new \APIHub\Client\Model\Error([
+    $error = new \PLD\Client\Model\Error([
         "code" => $code,
         "message" => $message
     ]);
-    $errors = new \APIHub\Client\Model\Errores(["errors" => [$error]]);
+    $errors = new \PLD\Client\Model\Errores(["errors" => [$error]]);
 
     $resource = fopen('data://text/plain,' . $errors,'r');
     $new_reponse = new \GuzzleHttp\Psr7\Stream($resource);

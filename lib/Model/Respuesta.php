@@ -1,32 +1,32 @@
 <?php
 
-namespace APIHub\Client\Model;
+namespace PLD\Client\Model;
 
 use \ArrayAccess;
-use \APIHub\Client\ObjectSerializer;
+use \PLD\Client\ObjectSerializer;
 
 class Respuesta implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
-    protected static $apihubModelName = 'Respuesta';
+    protected static $PLDModelName = 'Respuesta';
 
-    protected static $apihubTypes = [
-        'personas' => '\APIHub\Client\Model\Persona[]'
+    protected static $PLDTypes = [
+        'personas' => '\PLD\Client\Model\Persona[]'
     ];
 
-    protected static $apihubFormats = [
+    protected static $PLDFormats = [
         'personas' => null
     ];
 
-    public static function apihubTypes()
+    public static function PLDTypes()
     {
-        return self::$apihubTypes;
+        return self::$PLDTypes;
     }
 
-    public static function apihubFormats()
+    public static function PLDFormats()
     {
-        return self::$apihubFormats;
+        return self::$PLDFormats;
     }
 
     protected static $attributeMap = [
@@ -58,7 +58,7 @@ class Respuesta implements ModelInterface, ArrayAccess
 
     public function getModelName()
     {
-        return self::$apihubModelName;
+        return self::$PLDModelName;
     }
 
     protected $container = [];

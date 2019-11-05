@@ -1,36 +1,36 @@
 <?php
 
-namespace APIHub\Client\Model;
+namespace PLD\Client\Model;
 
 use \ArrayAccess;
-use \APIHub\Client\ObjectSerializer;
+use \PLD\Client\ObjectSerializer;
 
 class Peticion implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
-    protected static $apihubModelName = 'Peticion';
+    protected static $PLDModelName = 'Peticion';
 
-    protected static $apihubTypes = [
+    protected static $PLDTypes = [
         'nombres' => 'string',
         'apellido_paterno' => 'string',
         'apellido_materno' => 'string'
     ];
 
-    protected static $apihubFormats = [
+    protected static $PLDFormats = [
         'nombres' => null,
         'apellido_paterno' => null,
         'apellido_materno' => null
     ];
 
-    public static function apihubTypes()
+    public static function PLDTypes()
     {
-        return self::$apihubTypes;
+        return self::$PLDTypes;
     }
 
-    public static function apihubFormats()
+    public static function PLDFormats()
     {
-        return self::$apihubFormats;
+        return self::$PLDFormats;
     }
 
     protected static $attributeMap = [
@@ -68,7 +68,7 @@ class Peticion implements ModelInterface, ArrayAccess
 
     public function getModelName()
     {
-        return self::$apihubModelName;
+        return self::$PLDModelName;
     }
 
     protected $container = [];

@@ -1,6 +1,6 @@
 <?php
 
-namespace APIHub\Client;
+namespace PLD\Client;
 
 class ObjectSerializer
 {
@@ -17,19 +17,19 @@ class ObjectSerializer
             return $data;
         } elseif (is_object($data)) {
             $values = [];
-            $formats = $data::apihubFormats();
-            foreach ($data::apihubTypes() as $property => $apihubType) {
+            $formats = $data::PLDFormats();
+            foreach ($data::PLDTypes() as $property => $PLDType) {
                 $getter = $data::getters()[$property];
                 $value = $data->$getter();
                 if ($value !== null
-                    && !in_array($apihubType, ['DateTime', 'bool', 'boolean', 'byte', 'double', 'float', 'int', 'integer', 'mixed', 'number', 'object', 'string', 'void'], true)
-                    && method_exists($apihubType, 'getAllowableEnumValues')
-                    && !in_array($value, $apihubType::getAllowableEnumValues(), true)) {
-                    $imploded = implode("', '", $apihubType::getAllowableEnumValues());
-                    throw new \InvalidArgumentException("Invalid value for enum '$apihubType', must be one of: '$imploded'");
+                    && !in_array($PLDType, ['DateTime', 'bool', 'boolean', 'byte', 'double', 'float', 'int', 'integer', 'mixed', 'number', 'object', 'string', 'void'], true)
+                    && method_exists($PLDType, 'getAllowableEnumValues')
+                    && !in_array($value, $PLDType::getAllowableEnumValues(), true)) {
+                    $imploded = implode("', '", $PLDType::getAllowableEnumValues());
+                    throw new \InvalidArgumentException("Invalid value for enum '$PLDType', must be one of: '$imploded'");
                 }
                 if ($value !== null) {
-                    $values[$data::attributeMap()[$property]] = self::sanitizeForSerialization($value, $apihubType, $formats[$property]);
+                    $values[$data::attributeMap()[$property]] = self::sanitizeForSerialization($value, $PLDType, $formats[$property]);
                 }
             }
             return (object)$values;
@@ -176,13 +176,13 @@ class ObjectSerializer
             // If a discriminator is defined and points to a valid subclass, use it.
             $discriminator = $class::DISCRIMINATOR;
             if (!empty($discriminator) && isset($data->{$discriminator}) && is_string($data->{$discriminator})) {
-                $subclass = '\APIHub\Client\Model\\' . $data->{$discriminator};
+                $subclass = '\PLD\Client\Model\\' . $data->{$discriminator};
                 if (is_subclass_of($subclass, $class)) {
                     $class = $subclass;
                 }
             }
             $instance = new $class();
-            foreach ($instance::apihubTypes() as $property => $type) {
+            foreach ($instance::PLDTypes() as $property => $type) {
                 $propertySetter = $instance::setters()[$property];
 
                 if (!isset($propertySetter) || !isset($data->{$instance::attributeMap()[$property]})) {
