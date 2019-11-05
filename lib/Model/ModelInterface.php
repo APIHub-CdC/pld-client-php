@@ -1,15 +1,15 @@
 <?php
 
-namespace APIHub\Client\Model;
+namespace PLD\Client\Model;
 
 interface ModelInterface
 {
     
     public function getModelName();
 
-    public static function apihubTypes();
+    public static function PLDTypes();
 
-    public static function apihubFormats();
+    public static function PLDFormats();
 
     public static function attributeMap();
 

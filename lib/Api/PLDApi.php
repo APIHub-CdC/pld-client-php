@@ -1,6 +1,6 @@
 <?php
 
-namespace APIHub\Client\Api;
+namespace PLD\Client\Api;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
@@ -8,10 +8,10 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\MultipartStream;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
-use APIHub\Client\ApiException;
-use APIHub\Client\Configuration;
-use APIHub\Client\HeaderSelector;
-use APIHub\Client\ObjectSerializer;
+use PLD\Client\ApiException;
+use PLD\Client\Configuration;
+use PLD\Client\HeaderSelector;
+use PLD\Client\ObjectSerializer;
 
 class PLDApi
 {
@@ -44,7 +44,7 @@ class PLDApi
 
     public function getPLDWithHttpInfo($x_api_key, $username, $password, $body)
     {
-        $returnType = '\APIHub\Client\Model\Respuesta';
+        $returnType = '\PLD\Client\Model\Respuesta';
         $request = $this->getPLDRequest($x_api_key, $username, $password, $body);
 
         try {
@@ -96,7 +96,7 @@ class PLDApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\APIHub\Client\Model\Respuesta',
+                        '\PLD\Client\Model\Respuesta',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -104,7 +104,7 @@ class PLDApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\APIHub\Client\Model\Errores',
+                        '\PLD\Client\Model\Errores',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -112,7 +112,7 @@ class PLDApi
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\APIHub\Client\Model\Errores',
+                        '\PLD\Client\Model\Errores',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -120,7 +120,7 @@ class PLDApi
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\APIHub\Client\Model\Errores',
+                        '\PLD\Client\Model\Errores',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -128,7 +128,7 @@ class PLDApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\APIHub\Client\Model\Errores',
+                        '\PLD\Client\Model\Errores',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -136,7 +136,7 @@ class PLDApi
                 case 429:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\APIHub\Client\Model\Errores',
+                        '\PLD\Client\Model\Errores',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -144,7 +144,7 @@ class PLDApi
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\APIHub\Client\Model\Errores',
+                        '\PLD\Client\Model\Errores',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -166,7 +166,7 @@ class PLDApi
 
     public function getPLDAsyncWithHttpInfo($x_api_key, $username, $password, $x_signature, $body)
     {
-        $returnType = '\APIHub\Client\Model\Respuesta';
+        $returnType = '\PLD\Client\Model\Respuesta';
         $request = $this->getPLDRequest($x_api_key, $username, $password, $x_signature, $body);
 
         return $this->client

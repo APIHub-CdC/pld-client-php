@@ -1,5 +1,5 @@
 {
-    "name": "/",
+    "name": "apihub-cdc/pld-client-php",
     "description": "",
     "keywords": [
         "php",
@@ -21,9 +21,9 @@
         "friendsofphp/php-cs-fixer": "~2.12"
     },
     "autoload": {
-        "psr-4": { "APIHub\\Client\\" : "lib/" }
+        "psr-4": { "PLD\\Client\\" : "lib/" }
     },
     "autoload-dev": {
-        "psr-4": { "APIHub\\Client\\" : "test/" }
+        "psr-4": { "PLD\\Client\\" : "test/" }
     }
 }

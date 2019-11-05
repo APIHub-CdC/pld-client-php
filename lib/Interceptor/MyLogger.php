@@ -1,5 +1,5 @@
 <?php
-namespace APIHub\Client\Interceptor;
+namespace PLD\Client\Interceptor;
 
 use \Monolog\Logger;
 use \Monolog\Formatter\LineFormatter;
