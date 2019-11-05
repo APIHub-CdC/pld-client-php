@@ -102,7 +102,7 @@ openssl pkcs12 -name ${ALIAS} \
 * Esto es parte del setUp() de las pruebas unitarias.
 */
 $password = getenv('KEY_PASSWORD');
-$this->signer = new \APIHub\Client\Interceptor\KeyHandler(
+$this->signer = new \PLD\Client\Interceptor\KeyHandler(
     "/example/route/keypair.p12",
     "/example/route/cdc_cert.pem",
     $password
@@ -112,11 +112,12 @@ $this->signer = new \APIHub\Client\Interceptor\KeyHandler(
 
 ### Paso 4. Modificar URL
 
- Modificar la URL de la petición en ***lib/Configuration.php*** en la línea 19, como se muestra en el siguiente fragmento de código:
+Modificar la URL de la petición del objeto $config, como se muestra en el siguiente fragmento de código:
 
- ```php
- protected $host = 'the_url';
- ```
+```php
+    $config = new \PLD\Client\Configuration();
+    $config->setHost('the_url');
+```
 
 ### Paso 5. Capturar los datos de la petición
 
@@ -127,17 +128,16 @@ Es importante contar con el setUp() que se encargará de firmar y verificar la p
 public function setUp()
 {
     $password = getenv('KEY_PASSWORD');
-    $this->signer = new \APIHub\Client\Interceptor\KeyHandler(null, null, $password);
-    $events = new \APIHub\Client\Interceptor\MiddlewareEvents($this->signer);
+    $this->signer = new \PLD\Client\Interceptor\KeyHandler(null, null, $password);
+    $events = new \PLD\Client\Interceptor\MiddlewareEvents($this->signer);
     $handler = \GuzzleHttp\HandlerStack::create();
     $handler->push($events->add_signature_header('x-signature'));
     $handler->push($events->verify_signature_header('x-signature'));
 
-    $client = new \GuzzleHttp\Client([
-        'handler' => $handler,
-        'verify' => false
-    ]);
-    $this->apiInstance = new \APIHub\Client\Api\PLDApi($client);
+    $config = new \PLD\Client\Configuration();
+    $config->setHost('the_url');
+    $client = new \GuzzleHttp\Client(['handler' => $handler]);
+    $this->apiInstance = new \PLD\Client\Api\PLDApi($client, $config);
 }    
 ```
 ```php
@@ -152,7 +152,7 @@ public function testGetPLD()
   $username = "your_username";
   $password = "your_password";
 
-  $body = new \APIHub\Client\Model\Peticion();
+  $body = new \PLD\Client\Model\Peticion();
 
   $body->setNombres("XXXXX");
   $body->setApellidoPaterno("XXXXXX");

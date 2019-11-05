@@ -1,34 +1,34 @@
 <?php
 
-namespace APIHub\Client\Model;
+namespace PLD\Client\Model;
 
 use \ArrayAccess;
-use \APIHub\Client\ObjectSerializer;
+use \PLD\Client\ObjectSerializer;
 
 class Error implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
-    protected static $apihubModelName = 'Error';
+    protected static $PLDModelName = 'Error';
 
-    protected static $apihubTypes = [
+    protected static $PLDTypes = [
         'codigo' => 'string',
         'mensaje' => 'string'
     ];
 
-    protected static $apihubFormats = [
+    protected static $PLDFormats = [
         'codigo' => null,
         'mensaje' => null
     ];
 
-    public static function apihubTypes()
+    public static function PLDTypes()
     {
-        return self::$apihubTypes;
+        return self::$PLDTypes;
     }
 
-    public static function apihubFormats()
+    public static function PLDFormats()
     {
-        return self::$apihubFormats;
+        return self::$PLDFormats;
     }
 
     protected static $attributeMap = [
@@ -63,7 +63,7 @@ class Error implements ModelInterface, ArrayAccess
 
     public function getModelName()
     {
-        return self::$apihubModelName;
+        return self::$PLDModelName;
     }
 
 

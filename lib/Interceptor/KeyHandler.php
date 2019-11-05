@@ -1,12 +1,12 @@
 <?php
     
-namespace APIHub\Client\Interceptor;
+namespace PLD\Client\Interceptor;
 
 use \Monolog\Logger;
 use \Monolog\Formatter\LineFormatter;
 use \Monolog\Handler\StreamHandler;
 
-use \APIHub\Client\Interceptor\MyLogger;
+use \PLD\Client\Interceptor\MyLogger;
 
 Class KeyHandler{
 

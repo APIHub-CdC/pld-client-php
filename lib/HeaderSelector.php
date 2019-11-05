@@ -1,6 +1,6 @@
 <?php
 
-namespace APIHub\Client;
+namespace PLD\Client;
 
 use \Exception;
 

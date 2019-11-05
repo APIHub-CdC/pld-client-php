@@ -1,13 +1,13 @@
 <?php
 
-namespace APIHub\Client;
+namespace PLD\Client;
 
 use \GuzzleHttp\Client;
 use \GuzzleHttp\HandlerStack;
 
-use \APIHub\Client\ApiException;
-use \APIHub\Client\Interceptor\KeyHandler;
-use \APIHub\Client\Interceptor\MiddlewareEvents;
+use \PLD\Client\ApiException;
+use \PLD\Client\Interceptor\KeyHandler;
+use \PLD\Client\Interceptor\MiddlewareEvents;
 
 class PLDApiTest extends \PHPUnit_Framework_TestCase
 {
@@ -17,17 +17,16 @@ class PLDApiTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $password = getenv('KEY_PASSWORD');
-        $this->signer = new \APIHub\Client\Interceptor\KeyHandler(null, null, $password);
-        $events = new \APIHub\Client\Interceptor\MiddlewareEvents($this->signer);
+        $this->signer = new \PLD\Client\Interceptor\KeyHandler(null, null, $password);
+        $events = new \PLD\Client\Interceptor\MiddlewareEvents($this->signer);
         $handler = \GuzzleHttp\HandlerStack::create();
         $handler->push($events->add_signature_header('x-signature'));
         $handler->push($events->verify_signature_header('x-signature'));
 
-        $client = new \GuzzleHttp\Client([
-            'handler' => $handler,
-            'verify' => false
-        ]);
-        $this->apiInstance = new \APIHub\Client\Api\PLDApi($client);
+        $config = new \PLD\Client\Configuration();
+        $config->setHost('the_url');
+        $client = new \GuzzleHttp\Client(['handler' => $handler]);
+        $this->apiInstance = new \PLD\Client\Api\PLDApi($client, $config);
     }
 
     public function testGetPLD()
@@ -35,7 +34,7 @@ class PLDApiTest extends \PHPUnit_Framework_TestCase
         $x_api_key = "your_api_key";
         $username = "your_username";
         $password = "your_password";
-        $body = new \APIHub\Client\Model\Peticion();
+        $body = new \PLD\Client\Model\Peticion();
 
         $body->setNombres("XXXXXX");
         $body->setApellidoPaterno("XXXXXX");
