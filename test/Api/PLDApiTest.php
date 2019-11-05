@@ -46,7 +46,7 @@ class PLDApiTest extends \PHPUnit_Framework_TestCase
             $this->signer->close();
             print_r($result);
         } catch (Exception $e) {
-            echo 'Exception when calling SegmentadorApi->vantage: ', $e->getMessage(), PHP_EOL;
+            echo 'Exception when calling PLDApi->getPLD: ', $e->getMessage(), PHP_EOL;
         }
 
     }
