@@ -1,5 +1,5 @@
 {
-    "name": "apihub-cdc/pld-client-php",
+    "name": "apihub-cdc/pld-client",
     "description": "",
     "keywords": [
         "php",
@@ -13,7 +13,8 @@
         "ext-json": "*",
         "ext-mbstring": "*",
         "guzzlehttp/guzzle": "^6.2",
-        "monolog/monolog": "^1.24"
+        "monolog/monolog": "^1.24",
+        "apihub-cdc/signature-manager": "^1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^4.8",
@@ -21,9 +22,9 @@
         "friendsofphp/php-cs-fixer": "~2.12"
     },
     "autoload": {
-        "psr-4": { "PLD\\Client\\" : "lib/" }
+        "psr-4": { "pld\\mx\\Client\\" : "lib/" }
     },
     "autoload-dev": {
-        "psr-4": { "PLD\\Client\\" : "test/" }
+        "psr-4": { "pld\\mx\\Client\\" : "test/" }
     }
 }
