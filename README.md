@@ -102,7 +102,7 @@ openssl pkcs12 -name ${ALIAS} \
 * Esto es parte del setUp() de las pruebas unitarias.
 */
 $password = getenv('KEY_PASSWORD');
-$this->signer = new \PLD\Client\Interceptor\KeyHandler(
+$this->signer = new Signer\Manager\Interceptor\KeyHandler(
     "/example/route/keypair.p12",
     "/example/route/cdc_cert.pem",
     $password
@@ -115,7 +115,7 @@ $this->signer = new \PLD\Client\Interceptor\KeyHandler(
 Modificar la URL de la petición del objeto $config, como se muestra en el siguiente fragmento de código:
 
 ```php
-    $config = new \PLD\Client\Configuration();
+    $config = new \pld\mx\Client\Configuration();
     $config->setHost('the_url');
 ```
 
@@ -128,16 +128,16 @@ Es importante contar con el setUp() que se encargará de firmar y verificar la p
 public function setUp()
 {
     $password = getenv('KEY_PASSWORD');
-    $this->signer = new \PLD\Client\Interceptor\KeyHandler(null, null, $password);
-    $events = new \PLD\Client\Interceptor\MiddlewareEvents($this->signer);
+    $this->signer = new Signer\Manager\Interceptor\KeyHandler(null, null, $password);
+    $events = new Signer\Manager\Interceptor\MiddlewareEvents($this->signer);
     $handler = \GuzzleHttp\HandlerStack::create();
     $handler->push($events->add_signature_header('x-signature'));
     $handler->push($events->verify_signature_header('x-signature'));
 
-    $config = new \PLD\Client\Configuration();
+    $config = new \pld\mx\Client\Configuration();
     $config->setHost('the_url');
     $client = new \GuzzleHttp\Client(['handler' => $handler]);
-    $this->apiInstance = new \PLD\Client\Api\PLDApi($client, $config);
+    $this->apiInstance = new \pld\mx\Client\Api\PLDApi($client, $config);
 }    
 ```
 ```php
@@ -151,19 +151,19 @@ public function testGetPLD()
   $x_api_key = "your_api_key";
   $username = "your_username";
   $password = "your_password";
+  $body = new Peticion();
 
-  $body = new \PLD\Client\Model\Peticion();
-
-  $body->setNombres("XXXXX");
-  $body->setApellidoPaterno("XXXXXX");
-  $body->setApellidoMaterno("XXXXXX");
+  $body->setNombres("JUAN");
+  $body->setApellidoPaterno("PRUEBA");
+  $body->setApellidoMaterno("CUATRO");
 
   try {
-      $result = $this->apiInstance->testGetPLD($x_api_key, $username, $password, $body);
-      $this->signer->close();
-      print_r($result);
-  } catch (Exception $e) {
-      echo 'Exception when calling PLDApi->getPLD: ', $e->getMessage(), PHP_EOL;
+    $result = $this->apiInstance->getPLD($x_api_key, $username, $password, $body);
+    $this->assertTrue($result->getFolioConsulta()!==null);
+    $this->signer->close();
+    print_r($result);
+  } catch (Exception | ApiException $e) {
+    echo 'Exception when calling PLDApi->getPLD: ', $e->getMessage(), PHP_EOL;
   }
 }
 ?>
