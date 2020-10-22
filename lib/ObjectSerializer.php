@@ -1,9 +1,10 @@
 <?php
 
-namespace PLD\Client;
+namespace pld\mx\Client;
 
 class ObjectSerializer
 {
+    
     public static function sanitizeForSerialization($data, $type = null, $format = null)
     {
         if (is_scalar($data) || null === $data) {
@@ -15,21 +16,26 @@ class ObjectSerializer
                 $data[$property] = self::sanitizeForSerialization($value);
             }
             return $data;
+        } elseif ($data instanceof \stdClass) {
+            foreach ($data as $property => $value) {
+                $data->$property = self::sanitizeForSerialization($value);
+            }
+            return $data;
         } elseif (is_object($data)) {
             $values = [];
-            $formats = $data::PLDFormats();
-            foreach ($data::PLDTypes() as $property => $PLDType) {
+            $formats = $data::apihubFormats();
+            foreach ($data::apihubTypes() as $property => $apihubType) {
                 $getter = $data::getters()[$property];
                 $value = $data->$getter();
                 if ($value !== null
-                    && !in_array($PLDType, ['DateTime', 'bool', 'boolean', 'byte', 'double', 'float', 'int', 'integer', 'mixed', 'number', 'object', 'string', 'void'], true)
-                    && method_exists($PLDType, 'getAllowableEnumValues')
-                    && !in_array($value, $PLDType::getAllowableEnumValues(), true)) {
-                    $imploded = implode("', '", $PLDType::getAllowableEnumValues());
-                    throw new \InvalidArgumentException("Invalid value for enum '$PLDType', must be one of: '$imploded'");
+                    && !in_array($apihubType, ['DateTime', 'bool', 'boolean', 'byte', 'double', 'float', 'int', 'integer', 'mixed', 'number', 'object', 'string', 'void'], true)
+                    && method_exists($apihubType, 'getAllowableEnumValues')
+                    && !in_array($value, $apihubType::getAllowableEnumValues(), true)) {
+                    $imploded = implode("', '", $apihubType::getAllowableEnumValues());
+                    throw new \InvalidArgumentException("Invalid value for enum '$apihubType', must be one of: '$imploded'");
                 }
                 if ($value !== null) {
-                    $values[$data::attributeMap()[$property]] = self::sanitizeForSerialization($value, $PLDType, $formats[$property]);
+                    $values[$data::attributeMap()[$property]] = self::sanitizeForSerialization($value, $apihubType, $formats[$property]);
                 }
             }
             return (object)$values;
@@ -37,7 +43,7 @@ class ObjectSerializer
             return (string)$data;
         }
     }
-
+    
     public static function sanitizeFilename($filename)
     {
         if (preg_match("/.*[\/\\\\](.*)$/", $filename, $match)) {
@@ -46,12 +52,12 @@ class ObjectSerializer
             return $filename;
         }
     }
-
+    
     public static function toPathValue($value)
     {
         return rawurlencode(self::toString($value));
     }
-
+    
     public static function toQueryValue($object)
     {
         if (is_array($object)) {
@@ -60,12 +66,12 @@ class ObjectSerializer
             return self::toString($object);
         }
     }
-
+    
     public static function toHeaderValue($value)
     {
         return self::toString($value);
     }
-
+    
     public static function toFormValue($value)
     {
         if ($value instanceof \SplFileObject) {
@@ -74,45 +80,39 @@ class ObjectSerializer
             return self::toString($value);
         }
     }
-
+    
     public static function toString($value)
     {
-        if ($value instanceof \DateTime) { // datetime in ISO8601 format
+        if ($value instanceof \DateTime) {
             return $value->format(\DateTime::ATOM);
         } else {
             return $value;
         }
     }
-
+    
     public static function serializeCollection(array $collection, $collectionFormat, $allowCollectionFormatMulti = false)
     {
         if ($allowCollectionFormatMulti && ('multi' === $collectionFormat)) {
-            // http_build_query() almost does the job for us. We just
-            // need to fix the result of multidimensional arrays.
             return preg_replace('/%5B[0-9]+%5D=/', '=', http_build_query($collection, '', '&'));
         }
         switch ($collectionFormat) {
             case 'pipes':
                 return implode('|', $collection);
-
             case 'tsv':
                 return implode("\t", $collection);
-
             case 'ssv':
                 return implode(' ', $collection);
-
             case 'csv':
-                // Deliberate fall through. CSV is default format.
             default:
                 return implode(',', $collection);
         }
     }
-
+    
     public static function deserialize($data, $class, $httpHeaders = null)
     {
         if (null === $data) {
             return null;
-        } elseif (substr($class, 0, 4) === 'map[') { // for associative array e.g. map[string,int]
+        } elseif (substr($class, 0, 4) === 'map[') {
             $inner = substr($class, 4, -1);
             $deserialized = [];
             if (strrpos($inner, ",") !== false) {
@@ -134,12 +134,6 @@ class ObjectSerializer
             settype($data, 'array');
             return $data;
         } elseif ($class === '\DateTime') {
-            // Some API's return an invalid, empty string as a
-            // date-time property. DateTime::__construct() will return
-            // the current time for empty input which is probably not
-            // what is meant. The invalid empty string is probably to
-            // be interpreted as a missing field/value. Let's handle
-            // this graceful.
             if (!empty($data)) {
                 return new \DateTime($data);
             } else {
@@ -150,21 +144,17 @@ class ObjectSerializer
             return $data;
         } elseif ($class === '\SplFileObject') {
             /** @var \Psr\Http\Message\StreamInterface $data */
-
-            // determine file name
             if (array_key_exists('Content-Disposition', $httpHeaders) &&
                 preg_match('/inline; filename=[\'"]?([^\'"\s]+)[\'"]?$/i', $httpHeaders['Content-Disposition'], $match)) {
                 $filename = Configuration::getDefaultConfiguration()->getTempFolderPath() . DIRECTORY_SEPARATOR . self::sanitizeFilename($match[1]);
             } else {
                 $filename = tempnam(Configuration::getDefaultConfiguration()->getTempFolderPath(), '');
             }
-
             $file = fopen($filename, 'w');
             while ($chunk = $data->read(200)) {
                 fwrite($file, $chunk);
             }
             fclose($file);
-
             return new \SplFileObject($filename, 'r');
         } elseif (method_exists($class, 'getAllowableEnumValues')) {
             if (!in_array($data, $class::getAllowableEnumValues(), true)) {
@@ -173,22 +163,19 @@ class ObjectSerializer
             }
             return $data;
         } else {
-            // If a discriminator is defined and points to a valid subclass, use it.
             $discriminator = $class::DISCRIMINATOR;
             if (!empty($discriminator) && isset($data->{$discriminator}) && is_string($data->{$discriminator})) {
-                $subclass = '\PLD\Client\Model\\' . $data->{$discriminator};
+                $subclass = '\pld\mx\Client\Model\\' . $data->{$discriminator};
                 if (is_subclass_of($subclass, $class)) {
                     $class = $subclass;
                 }
             }
             $instance = new $class();
-            foreach ($instance::PLDTypes() as $property => $type) {
+            foreach ($instance::apihubTypes() as $property => $type) {
                 $propertySetter = $instance::setters()[$property];
-
                 if (!isset($propertySetter) || !isset($data->{$instance::attributeMap()[$property]})) {
                     continue;
                 }
-
                 $propertyValue = $data->{$instance::attributeMap()[$property]};
                 if (isset($propertyValue)) {
                     $instance->$propertySetter(self::deserialize($propertyValue, $type, null));

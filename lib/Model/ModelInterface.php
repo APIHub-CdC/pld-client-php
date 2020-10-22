@@ -1,23 +1,23 @@
 <?php
 
-namespace PLD\Client\Model;
+namespace pld\mx\Client\Model;
 
 interface ModelInterface
 {
     
     public function getModelName();
-
-    public static function PLDTypes();
-
-    public static function PLDFormats();
-
+    
+    public static function apihubTypes();
+    
+    public static function apihubFormats();
+    
     public static function attributeMap();
-
+    
     public static function setters();
-
+    
     public static function getters();
-
+    
     public function listInvalidProperties();
-
+    
     public function valid();
 }
